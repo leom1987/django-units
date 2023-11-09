@@ -1,0 +1,153 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My Django App</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'demo/css/styles.css' %}">
+        <script>
+            const unitConverterJSPath = "{% static 'demo/js/unit_converter.js' %}";
+            const unitConverterWasmPath = "{% static 'demo/js/unit_converter_bg.wasm' %}";
+        </script>
+        <script src="{% static 'demo/js/units.js' %}"></script>
+
+        <script>
+            const HIDDEN_CLASS = 'hidden';
+            const MAIN_OPACITY_DIMMED = 0.3;
+            const MAIN_OPACITY_NORMAL = 1.0;
+
+            function closeAllPopups(exceptPopup) {
+                const allPopups = document.querySelectorAll("div.popup-menu");
+                allPopups.forEach((popup) => {
+                    if (popup !== exceptPopup) {
+                        popup.classList.add(HIDDEN_CLASS);
+                    }
+                });
+                
+                if(!exceptPopup) {
+                    document.querySelector('main').style.opacity = MAIN_OPACITY_NORMAL;
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const menuElems = document.querySelectorAll("[ax-menu]");
+                menuElems.forEach((menuElem) => {
+                    menuElem.addEventListener('click', toggleMenu);
+                });
+
+                document.addEventListener('keydown', function(event) {
+                    if (event.key === 'Escape') {
+                    closeAllPopups();
+                    }
+                });
+            });
+
+            function toggleMenu(event) {
+                event.preventDefault();
+                const menuElem = event.target;
+                const targetPopupID = menuElem.getAttribute('ax-menu');
+                const targetPopup = document.getElementById(targetPopupID);
+                const mainElem = document.querySelector('main');
+
+                if (!targetPopup) return;
+
+                if (targetPopup.classList.contains(HIDDEN_CLASS)) {
+                    const rect = menuElem.getBoundingClientRect();
+                    targetPopup.style.left = rect.right + 'px';
+                    targetPopup.style.top = rect.top + 'px';
+                    mainElem.style.opacity = MAIN_OPACITY_DIMMED;
+                } else {
+                    mainElem.style.opacity = MAIN_OPACITY_NORMAL;
+                }
+                targetPopup.classList.toggle(HIDDEN_CLASS);
+
+                closeAllPopups(targetPopup);
+            }
+        </script>
+
+    </head>
+    <body>
+        <nav class="sidebar">
+            <div class="header pl-0-5">
+                <h1>Hello</h1>
+            </div>
+            <a href="#" ax-menu="menu1">Hello</a>
+            <a href="#" ax-menu="menu2">How are you?</a>
+            <a href="#" ax-menu="menu3">Quite well</a>
+            <a href="#" ax-menu="menu4">Thank you very much</a>
+            <div id="menu1" ax-popup-menu class="popup-menu hidden">
+                <a href="#">Link 1</a>
+                <a href="#">Link 2</a>
+                <a href="#">Link 3</a>
+                <a href="#">Link 4</a>
+            </div>
+            <div id="menu2" ax-popup-menu class="popup-menu hidden">
+                <a href="#">Link 5</a>
+                <a href="#">Link 6</a>
+                <a href="#">Link 7</a>
+                <a href="#">Link 8</a>
+                <a href="#">Link 9</a>
+                <a href="#">Link 10</a>
+            </div>
+            <div id="menu3" ax-popup-menu class="popup-menu hidden">
+                <a href="#">Link 11</a>
+                <a href="#">Link 12</a>
+            </div>
+            <div id="menu4" ax-popup-menu class="popup-menu hidden">
+                <a href="#">Link 13</a>
+                <a href="#">Link 14</a>
+                <a href="#">Link 15</a>
+                <a href="#">Link 16</a>
+                <a href="#">Link 17</a>
+                <a href="#">Link 18</a>
+            </div>
+            <a href="#" onclick="openUnitsDialog()">Convert Units</a>
+        </nav>
+        <main>
+            <div class="header">
+                <h1>Welcome to my Django App!</h1>
+            </div>
+            <form class="container" method="POST" action="{% url 'home' %}">
+                {% csrf_token %}
+                {{ form.inlet_pressure }}
+                <button type="submit">Save</button>
+            </form>
+            <div class="container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Value</th>
+                            <th>Unit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ax-unit>
+                            <td>Inlet Pressure</td>
+                            <td ax-unit-user>101325.0</td>
+                            <td ax-unit-repr>-</td>
+                            <input type="hidden" value="101325.0" ax-unit-si>
+                        </tr>
+                        <tr ax-unit>
+                            <td>Outlet Pressure</td>
+                            <td ax-unit-user>202650.0</td>
+                            <td ax-unit-repr>-</td>
+                            <input type="hidden" value="202650.0" ax-unit-si>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="container">
+                <div class="form-container">
+                    <label for="user-pressure">Pressure Units</label>
+                    <select name="user-pressure" id="user-pressure">
+                        <option value="pa">Pascal</option>
+                        <option value="psi" selected>psi</option>
+                        <option value="bar">bar</option>
+                    </select>
+                </div>
+            </div>
+        </main>
+        
+    </body>
+</html>

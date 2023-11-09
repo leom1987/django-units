@@ -1,0 +1,200 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Unit Converter With Backend Conversion Constants</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'demo/css/styles.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <script src="{% static 'demo/js/units_db.js' %}"></script>
+        <script src="{% static 'demo/js/ui.js' %}"></script>
+
+    </head>
+    <body>
+        <nav class="sidebar">
+            <div class="header pl-0-5">
+                <h1>Hello</h1>
+            </div>
+            <a href="#" ax-menu="menu1">Hello</a>
+            <a href="#" ax-menu="menu2">How are you?</a>
+            <a href="#" ax-menu="menu3">Quite well</a>
+            <a href="#" ax-menu="menu4">Thank you very much</a>
+            <div id="menu1" ax-popup-menu class="popup-menu hidden">
+                <a href="#">Link 1</a>
+                <a href="#">Link 2</a>
+                <a href="#">Link 3</a>
+                <a href="#">Link 4</a>
+            </div>
+            <div id="menu2" ax-popup-menu class="popup-menu hidden">
+                <a href="#">Link 5</a>
+                <a href="#">Link 6</a>
+                <a href="#">Link 7</a>
+                <a href="#">Link 8</a>
+                <a href="#">Link 9</a>
+                <a href="#">Link 10</a>
+            </div>
+            <div id="menu3" ax-popup-menu class="popup-menu hidden">
+                <a href="#">Link 11</a>
+                <a href="#">Link 12</a>
+            </div>
+            <div id="menu4" ax-popup-menu class="popup-menu hidden">
+                <a href="#">Link 13</a>
+                <a href="#">Link 14</a>
+                <a href="#">Link 15</a>
+                <a href="#">Link 16</a>
+                <a href="#">Link 17</a>
+                <a href="#">Link 18</a>
+            </div>
+            <a href="#" ax-menu="menu5">Units</a>
+            <div id="menu5" ax-popup-menu class="popup-menu hidden">
+                <a href="#" onclick="openDialog('units-dialog')">Convert</a>
+                <a href="#" onclick="openDialog('how-units-work-dialog')">Conversion Constants</a>
+            </div>
+        </nav>
+        <main>
+            <div class="header">
+                <h1>Welcome to my Django App!</h1>
+            </div>
+            <div class="container">
+                <div class="constellation">
+                    <div class="circle">A</div>
+                    <div class="circle">B</div>
+                    <div class="circle">C</div>
+                    <div class="circle">D</div>
+                    <div class="circle">E</div>
+                    <div class="circle">F</div>
+                </div>
+            </div>
+            <form class="container" method="POST" action="{% url 'home' %}">
+                {% csrf_token %}
+                {{ form.inlet_pressure }}
+                <button type="submit" class="action">Save</button>
+            </form>
+            <div class="container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Value</th>
+                            <th>Unit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ax-unit="ax-pressure">
+                            <td>Inlet Pressure</td>
+                            <td ax-unit-user></td>
+                            <td ax-unit-repr>Pa</td>
+                            <input type="hidden" value="101325.0" ax-unit-si>
+                        </tr>
+                        <tr ax-unit="ax-temperature">
+                            <td>Inlet Temperature</td>
+                            <td ax-unit-user></td>
+                            <td ax-unit-repr>K</td>
+                            <input type="hidden" value="293.15" ax-unit-si>
+                        </tr>
+                        <tr ax-unit="ax-pressure">
+                            <td>Outlet Pressure</td>
+                            <td ax-unit-user></td>
+                            <td ax-unit-repr>Pa</td>
+                            <input type="hidden" value="200000.0" ax-unit-si>
+                        </tr>
+                        <tr ax-unit="ax-temperature">
+                            <td>Outlet Temperature</td>
+                            <td ax-unit-user></td>
+                            <td ax-unit-repr>K</td>
+                            <input type="hidden" value="353.15" ax-unit-si>
+                        </tr>
+                        <tr ax-unit="ax-volume-flow">
+                            <td>Inlet Volume Flow</td>
+                            <td ax-unit-user></td>
+                            <td ax-unit-repr>m3/s</td>
+                            <input type="hidden" value="0.05" ax-unit-si>
+                        </tr>
+                        <tr ax-unit="ax-mass-flow">
+                            <td>Inlet Mass Flow</td>
+                            <td ax-unit-user></td>
+                            <td ax-unit-repr>kg/s</td>
+                            <input type="hidden" value="1.0" ax-unit-si>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <dialog id="units-dialog">
+                <div class="container">
+                    <div class="form-container select">
+                        <label for="user-pressure">Pressure Units</label>
+                        <select name="user-pressure" id="user-pressure">
+                            <option value="pa">pa</option>
+                            <option value="bar" selected>bar</option>
+                            <option value="bar-g">bar-g</option>
+                            <option value="psi">psi</option>
+                            <option value="psi-g">psi-g</option>
+                            <option value="atm">atm</option>
+                            <option value="mmHg">mmHg</option>
+                            <option value="torr">torr</option>
+                            <option value="inHg">inHg</option>
+                        </select>
+                    </div>
+                    <div class="form-container select">
+                        <label for="user-temperature">Temperature Units</label>
+                        <select name="user-temperature" id="user-temperature">
+                            <option value="K">&degK</option>
+                            <option value="C" selected>&degC</option>
+                            <option value="F">&degF</option>
+                        </select>
+                    </div>
+                    <div class="form-container select">
+                        <label for="user-volume-flow">Volume Flow Units</label>
+                        <select name="user-volume-flow" id="user-volume-flow">
+                            <option value="m3/s">m3/s</option>
+                            <option value="m3/m">m3/m</option>
+                            <option value="m3/h" selected>m3/h</option>
+                            <option value="l/s">l/s</option>
+                            <option value="ft3/s">ft3/s</option>
+                            <option value="ft3/m">ft3/m</option>
+                            <option value="ft3/h">ft3/h</option>
+                        </select>
+                    </div>
+                    <div class="form-container select">
+                        <label for="user-mass-flow">Mass Flow Units</label>
+                        <select name="user-mass-flow" id="user-mass-flow">
+                            <option value="kg/s">kg/s</option>
+                            <option value="kg/m">kg/m</option>
+                            <option value="kg/h" selected>kg/h</option>
+                            <option value="lb/s">lb/s</option>
+                            <option value="lb/m">lb/m</option>
+                            <option value="lb/h">lb/h</option>
+                        </select>
+                    </div>
+                    <div class="buttons">
+                        <button class="action" onclick="convertUnits()">Convert</button>
+                        <button onclick="closeDialog()">Close</button>
+                    </div>
+                </div>
+            </dialog>
+            <dialog id="how-units-work-dialog">
+                <div class="container">
+                    <div class="buttons">
+                        <button onclick="closeDialog()">Close</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Unit</th>
+                                <th>SI Base</th>
+                                <th>Multiplier</th>
+                                <th>Offset A</th>
+                                <th>Offset B</th>
+                                <th>Offset Gauge</th>
+                            </tr>
+                        </thead>
+                        <tbody id="how-units-work-tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </dialog>
+        </main>
+        
+    </body>
+</html>

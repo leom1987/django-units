@@ -1,0 +1,246 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Unit Converter With Backend Conversion Constants</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'demo/css/styles.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <script src="{% static 'demo/js/units_db.js' %}"></script>
+        <script src="{% static 'demo/js/ui.js' %}"></script>
+        <script src="{% static 'demo/js/convert.js' %}"></script>
+
+    </head>
+    <body>
+        <main class="main">
+            <div class="container convert-grid">
+                <div class="form-container select cols-2">
+                    <label class="hidden" for="unit-category"></label>
+                    <select name="unit-category" id="unit-category">
+                        <option value="pressure">Pressure</option>
+                        <option value="temperature">Temperature</option>
+                        <option value="volume-flow">Volume Flow</option>
+                        <option value="mass-flow">Mass Flow</option>
+                    </select>
+                </div>
+                <div class="form-container select">
+                    <label class="hidden" for="unit-from"></label>
+                    <select name="unit-from" id="unit-from">
+                        <option value="pa" selected>pa</option>
+                        <option value="bar">bar</option>
+                        <option value="bar-g">bar-g</option>
+                        <option value="psi">psi</option>
+                        <option value="psi-g">psi-g</option>
+                        <option value="atm">atm</option>
+                        <option value="mmHg">mmHg</option>
+                        <option value="torr">torr</option>
+                        <option value="inHg">inHg</option>
+                    </select>
+                </div>
+                <div class="form-container">
+                    <label class="hidden" for="magnitude-from"></label>
+                    <input type="number" steps="0.01" id="magnitude-from" value="1.0">
+                </div>
+                <div class="form-container select">
+                    <label class="hidden" for="unit-to"></label>
+                    <select name="unit-to" id="unit-to">
+                        <option value="pa">pa</option>
+                        <option value="bar" selected>bar</option>
+                        <option value="bar-g">bar-g</option>
+                        <option value="psi">psi</option>
+                        <option value="psi-g">psi-g</option>
+                        <option value="atm">atm</option>
+                        <option value="mmHg">mmHg</option>
+                        <option value="torr">torr</option>
+                        <option value="inHg">inHg</option>
+                    </select>
+                </div>
+                <div class="form-container">
+                    <label class="hidden" for="magnitude-to"></label>
+                    <input type="number" steps="0.01" id="magnitude-to">
+                </div>
+                <div class="form-container cols-2">
+                    <button type="button" class="action" id="save-conversion">Save</button>
+                </div>
+            </div>
+            <div class="container">
+                <table class="special">
+                    <thead>
+                        <tr>
+                            <th colspan="2">Conversions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="saved-conversions">
+                        <tr>
+                            <td>50.00 &degC</td>
+                            <td>122.00 &degF</td>
+                        </tr>
+                        <tr>
+                            <td>70.00 &degC</td>
+                            <td>158.00 &degF</td>
+                        </tr>
+                        <tr>
+                            <td>109.00 &degC</td>
+                            <td>228.2 &degF</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button id="delete-all" onclick="deleteAllEvent()">Delete All</button>
+            </div>
+            <div class="container">
+                <h2>To Do</h2>
+                <ul>
+                    <li>Save units repr to table - ie &degC not C</li>
+                    <li>Save table rows to local storage</li>
+                    <li>Modal to agree to use local storage</li>
+                    <li>Modal to configure user default units</li>
+                    <li>Save user defaults in local storage</li>
+                    <li>Add more units categories</li>
+                    <li>Show conversion formula / constants like in google</li>
+                    <li>On change units -> focus on input value field</li>
+                </ul>
+            </div>
+            <dialog id="units-dialog">
+                <div class="container">
+                    <div class="form-container select">
+                        <label for="user-pressure">Pressure Units</label>
+                        <select name="user-pressure" id="user-pressure">
+                            <option value="pa" selected>pa</option>
+                            <option value="bar">bar</option>
+                            <option value="bar-g">bar-g</option>
+                            <option value="psi">psi</option>
+                            <option value="psi-g">psi-g</option>
+                            <option value="atm">atm</option>
+                            <option value="mmHg">mmHg</option>
+                            <option value="torr">torr</option>
+                            <option value="inHg">inHg</option>
+                        </select>
+                    </div>
+                    <div class="form-container select">
+                        <label for="user-temperature">Temperature Units</label>
+                        <select name="user-temperature" id="user-temperature">
+                            <option value="K" selected>&degK</option>
+                            <option value="C">&degC</option>
+                            <option value="F">&degF</option>
+                        </select>
+                    </div>
+                    <div class="form-container select">
+                        <label for="user-volume-flow">Volume Flow Units</label>
+                        <select name="user-volume-flow" id="user-volume-flow">
+                            <option value="m3/s" selected>m3/s</option>
+                            <option value="m3/m">m3/m</option>
+                            <option value="m3/h">m3/h</option>
+                            <option value="l/s">l/s</option>
+                            <option value="ft3/s">ft3/s</option>
+                            <option value="ft3/m">ft3/m</option>
+                            <option value="ft3/h">ft3/h</option>
+                        </select>
+                    </div>
+                    <div class="form-container select">
+                        <label for="user-mass-flow">Mass Flow Units</label>
+                        <select name="user-mass-flow" id="user-mass-flow">
+                            <option value="kg/s" selected>kg/s</option>
+                            <option value="kg/m">kg/m</option>
+                            <option value="kg/h">kg/h</option>
+                            <option value="lb/s">lb/s</option>
+                            <option value="lb/m">lb/m</option>
+                            <option value="lb/h">lb/h</option>
+                        </select>
+                    </div>
+                    <div class="buttons">
+                        <button class="action" onclick="convertUnits()">Convert</button>
+                        <button onclick="closeDialog()">Close</button>
+                    </div>
+                </div>
+            </dialog>
+            <dialog id="how-units-work-dialog">
+                <div class="container">
+                    <div class="buttons">
+                        <button onclick="closeDialog()">Close</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Unit</th>
+                                <th>SI Base</th>
+                                <th>Multiplier</th>
+                                <th>Offset A</th>
+                                <th>Offset B</th>
+                                <th>Offset Gauge</th>
+                            </tr>
+                        </thead>
+                        <tbody id="how-units-work-tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </dialog>
+        </main>
+        <div class="hidden" id="id-input-templates">
+            <div class="form-container select" id="pressure">
+                <label class="hidden" for=""></label>
+                <select name="" id="">
+                    <option value="pa" selected>pa</option>
+                    <option value="bar">bar</option>
+                    <option value="bar-g">bar-g</option>
+                    <option value="psi">psi</option>
+                    <option value="psi-g">psi-g</option>
+                    <option value="atm">atm</option>
+                    <option value="mmHg">mmHg</option>
+                    <option value="torr">torr</option>
+                    <option value="inHg">inHg</option>
+                </select>
+            </div>
+            <div class="form-container select" id="temperature">
+                <label class="hidden" for=""></label>
+                <select name="" id="">
+                    <option value="K" selected>&degK</option>
+                    <option value="C">&degC</option>
+                    <option value="F">&degF</option>
+                </select>
+            </div>
+            <div class="form-container select" id="volume-flow">
+                <label class="hidden" for=""></label>
+                <select name="" id="">
+                    <option value="m3/s" selected>m3/s</option>
+                    <option value="m3/m">m3/m</option>
+                    <option value="m3/h">m3/h</option>
+                    <option value="l/s">l/s</option>
+                    <option value="ft3/s">ft3/s</option>
+                    <option value="ft3/m">ft3/m</option>
+                    <option value="ft3/h">ft3/h</option>
+                </select>
+            </div>
+            <div class="form-container select" id="mass-flow">
+                <label class="hidden" for=""></label>
+                <select name="" id="">
+                    <option value="kg/s" selected>kg/s</option>
+                    <option value="kg/m">kg/m</option>
+                    <option value="kg/h">kg/h</option>
+                    <option value="lb/s">lb/s</option>
+                    <option value="lb/m">lb/m</option>
+                    <option value="lb/h">lb/h</option>
+                </select>
+            </div>
+        </div>
+        <dialog id="modal-dialog">
+            <div class="container">
+                <p>Delete unit conversion?</p>
+                <div class="buttons">
+                    <button class="action" id="confirm-delete">Delete</button>
+                    <button onclick="closeDialog()">Close</button>
+                </div>
+            </div>
+        </dialog>
+
+        <dialog id="delete-all-dialog">
+            <div class="container">
+                <p>Delete all unit conversion?</p>
+                <div class="buttons">
+                    <button class="action" id="confirm-delete-all" onclick="deleteAllConversions()">Delete</button>
+                    <button onclick="closeDialog()">Close</button>
+                </div>
+            </div>
+        </dialog>
+    </body>
+</html>

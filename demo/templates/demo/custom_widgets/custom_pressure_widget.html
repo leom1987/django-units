@@ -1,0 +1,5 @@
+<div class="form-container" ax-unit="ax-pressure">
+    <label for="{{ widget.attrs.id }}-display">Pressure Field</label>
+    <input type="number" name="{{ widget.name }}-display" id="{{ widget.attrs.id }}-display" step="0.01" ax-unit-user>
+    <input type="hidden" name="{{ widget.name }}" id="{{ widget.attrs.id }}" value="{{ widget.value }}" ax-unit-si>
+</div>

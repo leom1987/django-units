@@ -1,0 +1,302 @@
+body {
+    background: rgb(24, 24, 24);
+    color: white;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 2em;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+}
+
+body * {
+    font-size: 14px;
+}
+
+.header {
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+.header.pl-0-5 {
+    padding-left: 0.5em;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+    background: rgb(33, 33, 33);
+}
+
+.sidebar a,
+.popup-menu a {
+    text-decoration: none;
+    padding: 0.5em 1em;
+    background: rgb(61, 61, 61);
+    color: white;
+}
+
+.sidebar a:hover,
+.popup-menu a:hover {  
+    cursor: pointer;
+}
+
+.popup-menu {
+    position: fixed;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+    padding: 0.5em;
+    background: rgb(33, 33, 33);
+    border-radius: 0.125em;
+    margin-left: 1em;
+    min-width: 250px;
+    border: 1px solid rgb(61, 61, 61);
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    min-height: 100vh;
+}
+
+dialog {
+    padding: 0;
+    border-radius: 0;
+    border: none;
+    background: inherit;
+}
+
+::backdrop {
+    background: rgb(33, 33, 33, 0.25);
+}
+
+.container {
+    background: rgb(33, 33, 33);
+    padding: 2em;
+    border-radius: 2px;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    color: white;
+}
+
+dialog .container {
+    background-color: rgb(61, 61, 61);
+    min-width: 20em;
+}
+
+form {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;  
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-container label {
+    margin-bottom: 0.5em;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input, select {
+    background: rgb(61, 61, 61);
+    color: white;
+    margin: 0;
+    outline: none;
+    box-shadow: none;
+    border: none;
+    padding: 0.75em;
+}
+
+input, select {
+    border: 1px solid rgb(170, 170, 170);
+}
+
+input:hover, 
+input:focus,
+select:hover,
+select:focus {
+    box-shadow: 0 0 2px white;
+}
+
+button {
+    padding: 0.75em;
+    border-radius: 2px;
+    outline: none;
+    box-shadow: none;
+    border: none;
+    background: rgb(170, 170, 170);
+}
+
+button:hover,
+.sidebar a:hover,
+.popup-menu a:hover {
+    background: white;
+    color: black;
+    cursor: pointer;
+}
+
+h1, h2, h3 {
+    margin: 0;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+td, th {
+    padding: 0.5em 0.25em;
+    border-bottom: 1px solid rgb(61, 61, 61);
+    text-align: left;
+    white-space: nowrap;
+}
+
+th {
+    border-bottom-color: white;
+}
+
+tr td:last-of-type,
+tr th:last-of-type {
+    /* width: 100%; */
+    text-align: right;
+}
+
+thead tr:first-of-type th {
+    border-top: 1px solid rgb(61, 61, 61);
+}
+
+tbody tr:nth-child(odd) * {
+    background: rgb(36, 36, 36);
+}
+
+#how-units-work-tbody td,
+#how-units-work-dialog th {
+    padding: 0.25em 0.5em;
+    border-bottom-color: white;
+}
+
+tr td:not(:last-of-type),
+tr th:not(:last-of-type) {
+    padding-right: 2em;
+}
+
+.hidden {
+    display: none;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+button {
+    padding: 0.75 1;
+    border: 1px solid white; 
+    color: white;
+    background: inherit;
+}
+
+button.action {
+    background: rgb(0, 128, 128);
+    color: white;
+    border-color: rgb(0, 128 ,128);
+}
+
+button.action:hover {
+    background-color: inherit;
+    border-color: rgb(0, 128 ,128);
+}
+
+.constellation {
+    position: relative;
+    width: 300px;
+    height: 300px;
+}
+  
+.circle {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: blue; /* or any color you like */
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    transition: transform 1s ease;
+    transform: translate(-50%, -50%) rotate(var(--angle)) translate(100px) rotate(-1 * var(--angle));
+}
+
+
+main.main {
+    grid-column: 1 / -1;
+    padding: 2em;
+    align-items: center;
+}
+
+table.special {
+    width: 100%;
+}
+
+table.special tr td,
+table.special tr th {
+    text-align: center;
+    padding: 0.5em;
+    width: 50%;
+    min-width: calc(13em - 0.5em - 0.25em);
+}
+
+table.special th[colspan="2"] {
+    min-width: calc(26em - 1.5em);
+}
+
+table.special tr td svg {
+    color: white;
+}
+
+table.special tr td:first-child {
+    padding-left: 0.25em;
+}
+
+table.special tr td:last-child {
+    padding-right: 0.25em;
+}
+
+.convert-grid {
+    display: grid;
+    grid-template-columns: 12em 12em;
+}
+
+.cols-2 {
+    grid-column: span 2;
+}
+
+table.special tr:hover {
+    cursor: pointer;
+}
+
+table.special tr:hover td {
+    background: rgb(39, 39, 39);
+}
